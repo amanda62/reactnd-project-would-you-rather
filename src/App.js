@@ -1,7 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
 
-function App() {
-  return <>App</>;
+function App({ label }) {
+  return <>{label}</>;
 }
 
-export default App;
+export default connect(state => ({ label: state }))(App);
