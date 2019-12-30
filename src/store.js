@@ -1,9 +1,22 @@
 import { createStore } from "redux";
+import initialState from "./initialState";
 
-const rootReducer = (state = "app", action) => {
-  return state;
+const rootReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "vote":
+      return {
+        ...state,
+        questions: {
+          ...state.questions,
+          [action.payload.questionId]: {
+            ...state.questions[action.payload.questionId],
+            answer: [action.payload.option]
+          }
+        }
+      };
+    default:
+      return state;
+  }
 };
 
-const store = createStore(rootReducer);
-
-export default store;
+export default createStore(rootReducer);
