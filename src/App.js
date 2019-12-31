@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Card, Typography, Button } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import Poll from "./components/Poll";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -11,60 +12,21 @@ const useStyles = makeStyles(theme => ({
   title: {
     ...theme.typography.h3,
     paddingBottom: theme.spacing(2)
-  },
-  card: {
-    padding: theme.spacing(2)
   }
 }));
 
-function App({ questions, dispatch }) {
+function App({ questions }) {
   const classes = useStyles();
   const currentQuestion = Object.values(questions).find(
     question => question.answer === null
   );
-  const handleClick = (questionId, option) => {
-    const action = {
-      type: "vote",
-      payload: {
-        questionId,
-        option
-      }
-    };
-    dispatch(action);
-  };
 
   return (
     <div className={classes.root}>
       <Typography className={classes.title} variant="h1">
         Would you rather:
       </Typography>
-      <Card className={classes.card}>
-        {currentQuestion ? (
-          <>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              onClick={() => handleClick(currentQuestion.id, "optionOne")}
-            >
-              {currentQuestion.optionOne.text}
-            </Button>
-            <Typography variant="h3" align="center">
-              or
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              onClick={() => handleClick(currentQuestion.id, "optionTwo")}
-            >
-              {currentQuestion.optionTwo.text}
-            </Button>
-          </>
-        ) : (
-          <Typography variant="h3">ALL QUESTIONS DONE-ZO!</Typography>
-        )}
-      </Card>
+      <Poll currentQuestion={currentQuestion} />
     </div>
   );
 }
