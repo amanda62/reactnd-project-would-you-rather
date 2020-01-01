@@ -1,9 +1,9 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import App from "./App";
-import AppProvider from "./AppProvider";
+import Home from "./Home";
+import AppProvider from "../AppProvider";
 
-jest.mock("./initialState", () => ({
+jest.mock("../initialState", () => ({
   questions: {
     a: {
       id: "a",
@@ -40,26 +40,26 @@ jest.mock("./initialState", () => ({
 
 const ourRender = jsx => render(<AppProvider>{jsx}</AppProvider>);
 
-describe("App", () => {
+describe("Home", () => {
   it("should skip answered polls", () => {
-    const { queryByText } = ourRender(<App />);
+    const { queryByText } = ourRender(<Home />);
     const firstOption = queryByText(/have horrible short term memory/i);
     expect(firstOption).toBeNull();
   });
   it("should show the first un-answered poll", () => {
-    const { getByText } = ourRender(<App />);
+    const { getByText } = ourRender(<Home />);
     const firstOption = getByText(/become a superhero/i);
     expect(firstOption).toBeInTheDocument();
   });
   it("should show the next un-answered poll once the first is submitted", () => {
-    const { getByText } = ourRender(<App />);
+    const { getByText } = ourRender(<Home />);
     const clickQuestion = getByText(/become a superhero/i);
     fireEvent.click(clickQuestion);
     const firstOption = getByText(/be telekinetic/i);
     expect(firstOption).toBeInTheDocument();
   });
   it("should show a message when all polls have been answered", () => {
-    const { getByText } = ourRender(<App />);
+    const { getByText } = ourRender(<Home />);
     const clickQuestion2 = getByText(/be telekinetic/i);
     fireEvent.click(clickQuestion2);
     const firstOption = getByText(/ALL QUESTIONS DONE-ZO!/i);

@@ -1,46 +1,13 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import Poll from "./components/Poll";
+import { Route, Switch } from "react-router-dom";
+import Home from "./views/Home";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3)
-  },
-  title: {
-    ...theme.typography.h3,
-    paddingBottom: theme.spacing(2)
-  }
-}));
-
-function App({ questions }) {
-  const classes = useStyles();
-  const unansweredQuestions = Object.values(questions).filter(
-    question => question.answer === null
-  );
-
+export default function App() {
   return (
-    <div className={classes.root}>
-      <Typography className={classes.title} variant="h1">
-        Would you rather:
-      </Typography>
-
-      {unansweredQuestions.length ? (
-        unansweredQuestions.map(question => (
-          <Poll currentQuestion={question} key={question.id} />
-        ))
-      ) : (
-        <Typography variant="h3">ALL QUESTIONS DONE-ZO!</Typography>
-      )}
-    </div>
+    <Switch>
+      <Route exact path="/">
+        <Home />
+      </Route>
+    </Switch>
   );
 }
-
-const mapStatetoProps = state => ({
-  questions: state.questions
-});
-//const mapDispatchToProps  = () => {}  if the second argument isn't passed
-//to connect the component will receive dispatch by default
-export default connect(mapStatetoProps)(App);
