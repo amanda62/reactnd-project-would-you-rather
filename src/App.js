@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 function App({ questions }) {
   const classes = useStyles();
-  const currentQuestion = Object.values(questions).find(
+  const unansweredQuestions = Object.values(questions).filter(
     question => question.answer === null
   );
 
@@ -26,7 +26,14 @@ function App({ questions }) {
       <Typography className={classes.title} variant="h1">
         Would you rather:
       </Typography>
-      <Poll currentQuestion={currentQuestion} />
+
+      {unansweredQuestions.length ? (
+        unansweredQuestions.map(question => (
+          <Poll currentQuestion={question} key={question.id} />
+        ))
+      ) : (
+        <Typography variant="h3">ALL QUESTIONS DONE-ZO!</Typography>
+      )}
     </div>
   );
 }

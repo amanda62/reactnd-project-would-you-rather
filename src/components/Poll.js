@@ -5,7 +5,8 @@ import { vote } from "../redux/actions";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   }
 }));
 
@@ -14,7 +15,7 @@ export default function Poll({ currentQuestion }) {
 
   return (
     <Card className={classes.root}>
-      {currentQuestion ? (
+      {
         <>
           <Button
             variant="contained"
@@ -36,9 +37,7 @@ export default function Poll({ currentQuestion }) {
             {currentQuestion.optionTwo.text}
           </Button>
         </>
-      ) : (
-        <Typography variant="h3">ALL QUESTIONS DONE-ZO!</Typography>
-      )}
+      }
     </Card>
   );
 }
