@@ -1,22 +1,30 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { Card, Typography, Button } from "@material-ui/core";
+import { useParams } from "react-router-dom";
+import { Button } from "@material-ui/core";
 import { vote } from "../redux/actions";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    padding: theme.spacing(2),
-    marginBottom: theme.spacing(2)
-  }
+  root: {}
 }));
 
-export default function Poll({ currentQuestion }) {
+export default function PollDetail() {
   const classes = useStyles();
+  const params = useParams();
+  const currentQuestion = useSelector(
+    state => state.questions[params.questionId]
+  );
 
   return (
-    <Card className={classes.root}>
-      {
+    <div className={classes.root}>
+      {`Poll Detail ${currentQuestion.id}`}
+
+      {currentQuestion.answer === null ? (
         <>
+          <Typography variant="h3">Would you rather: </Typography>
           <Button
             variant="contained"
             color="primary"
@@ -37,7 +45,12 @@ export default function Poll({ currentQuestion }) {
             {currentQuestion.optionTwo.text}
           </Button>
         </>
-      }
-    </Card>
+      ) : (
+        <Typography>{`you chose: ${
+          currentQuestion[currentQuestion.answer].text
+        }`}</Typography>
+      )}
+      <Link to="/">Home</Link>
+    </div>
   );
 }

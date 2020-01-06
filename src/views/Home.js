@@ -1,22 +1,26 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Typography } from "@material-ui/core";
+import { useSelector } from "react-redux";
+import { Typography, Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import Poll from "../components/Poll";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3)
-  },
   title: {
     ...theme.typography.h3,
     paddingBottom: theme.spacing(2)
+  },
+  card: {
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    cursor: "pointer"
   }
 }));
 
-function Home({ questions }) {
+export default function Home() {
   const classes = useStyles();
+  const history = useHistory();
+  const questions = useSelector(state => state.questions);
+
   const unansweredQuestions = Object.values(questions).filter(
     question => question.answer === null
   );
@@ -28,7 +32,15 @@ function Home({ questions }) {
 
       {unansweredQuestions.length ? (
         unansweredQuestions.map(question => (
-          <Poll currentQuestion={question} key={question.id} />
+          <Card
+            className={classes.card}
+            key={question.id}
+            onClick={() => history.push(`/questions/${question.id}`)}
+          >
+            <Typography>{question.answer}</Typography>
+            <Typography>{question.optionOne.text}</Typography>
+            <Typography>{question.optionTwo.text}</Typography>
+          </Card>
         ))
       ) : (
         <Typography variant="h3">ALL QUESTIONS DONE-ZO!</Typography>
@@ -36,10 +48,3 @@ function Home({ questions }) {
     </div>
   );
 }
-
-const mapStatetoProps = state => ({
-  questions: state.questions
-});
-//const mapDispatchToProps  = () => {}  if the second argument isn't passed
-//to connect the component will receive dispatch by default
-export default connect(mapStatetoProps)(Home);
