@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Typography, Card } from "@material-ui/core";
+import { Typography, Card, CardContent } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useHistory } from "react-router-dom";
 
@@ -10,9 +10,11 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(2)
   },
   card: {
-    padding: theme.spacing(2),
     marginBottom: theme.spacing(2),
     cursor: "pointer"
+  },
+  content: {
+    textAlign: "center"
   }
 }));
 
@@ -37,9 +39,12 @@ export default function Home() {
             key={question.id}
             onClick={() => history.push(`/questions/${question.id}`)}
           >
-            <Typography>{question.answer}</Typography>
-            <Typography>{question.optionOne.text}</Typography>
-            <Typography>{question.optionTwo.text}</Typography>
+            <CardContent className={classes.content}>
+              <Typography>{question.answer}</Typography>
+              <Typography variant="body1">{question.optionOne.text}</Typography>
+              <Typography variant="body2">or</Typography>
+              <Typography variant="body1">{question.optionTwo.text}</Typography>
+            </CardContent>
           </Card>
         ))
       ) : (

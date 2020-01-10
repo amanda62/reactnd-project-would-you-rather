@@ -14,6 +14,14 @@ const rootReducer = (state = initialState, action) => {
           }
         }
       };
+    case "createNewQuestion":
+      return {
+        ...state,
+        questions: {
+          ...state.questions,
+          [action.payload.newQuestion.id]: action.payload.newQuestion
+        }
+      };
     default:
       return state;
   }
