@@ -7,6 +7,8 @@ import PollDetail from "./views/PollDetail";
 import Ask from "./views/Ask";
 import Leaderboard from "./views/Leaderboard";
 import Login from "./views/Login";
+import Register from "./views/Register";
+import { Container } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,23 +22,28 @@ export default function App() {
   return (
     <div className={classes.root}>
       <Header />
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route exact path="/questions/:questionId">
-          <PollDetail />
-        </Route>
-        <Route exact path="/ask">
-          <Ask />
-        </Route>
-        <Route exact path="/leaderboard">
-          <Leaderboard />
-        </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-      </Switch>
+      <Container maxWidth="sm">
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route exact path="/questions/:questionId">
+            <PollDetail />
+          </Route>
+          <Route exact path="/ask">
+            <Ask />
+          </Route>
+          <Route exact path="/leaderboard">
+            <Leaderboard />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route exact path="/register">
+            <Register />
+          </Route>
+        </Switch>
+      </Container>
     </div>
   );
 }

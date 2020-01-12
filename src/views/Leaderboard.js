@@ -1,57 +1,53 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { makeStyles, withStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 import {
   Card,
   CardContent,
-  CardMedia,
+  CardHeader,
   Typography,
-  // Divider,
-  TableContainer,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow
-  // Box
-  // Avatar
+  Divider,
+  Avatar
 } from "@material-ui/core";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles(theme => ({
-  root: {},
   card: {
     display: "flex",
-    flexDirection: "row"
+    flexDirection: "column",
+    marginBottom: theme.spacing(2)
   },
-  media: {
-    width: "30%"
-  },
+  avatar: { width: theme.spacing(15), height: theme.spacing(15) },
   content: {
-    width: "50%",
-    borderBottom: "none"
+    display: "flex",
+    flexDirection: "column",
+    [theme.breakpoints.up("md")]: {
+      flexDirection: "row"
+    }
   },
   score: {
-    width: "20%"
+    maxWidth: "40%",
+    alignSelf: "center",
+    [theme.breakpoints.up("md")]: {
+      maxWidth: "20%"
+    }
+  },
+  horizontalDivider: {
+    margin: theme.spacing(2)
+  },
+  infoContainer: {
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly"
+  },
+  info: {
+    justifyContent: "space-between",
+    display: "flex"
   }
-  // shapeCircle: {
-  // borderRadius: "50%",
-  // backgroundColor: theme.palette.primary.main,
-  // width: 40,
-  // height: 40,
-  // borderRadius: "50px",
-  // background: "green",
-  // color: "white",
-  // padding: "10px 15px"
-  // }
 }));
-
-const TableCellNoLines = withStyles({
-  root: {
-    borderBottom: "none"
-  }
-})(TableCell);
 
 export default function Leaderboard() {
   const classes = useStyles();
@@ -63,90 +59,57 @@ export default function Leaderboard() {
   const maxScore = Math.max(
     ...Object.values(users).map(user => userScore(user))
   );
+  const desktop = useMediaQuery(theme => theme.breakpoints.up("md"));
 
   return (
-    <div className={classes.root}>
+    <>
       {Object.values(users)
         .sort((a, b) => userScore(b) - userScore(a))
         .map(user => (
-          <Card className={classes.card} key={user.id}>
-            <CardMedia
-              className={classes.media}
-              component="img"
-              alt="user avatar"
-              height="100%"
-              image=""
-              title="user avatar"
+          <Card className={classes.card} key={user.id} raised="true">
+            <CardHeader
+              avatar={<Avatar src={user.avatarURL} />}
+              title={user.name}
             />
-            {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
-            {/* <Divider orientation="vertical" variant="inset" /> */}
+
             <CardContent className={classes.content}>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCellNoLines>
-                        <Typography variant="h3">{user.name}</Typography>
-                      </TableCellNoLines>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCellNoLines>
-                        <Typography>Answered Questions</Typography>
-                      </TableCellNoLines>
-                      <TableCellNoLines>
-                        <Typography>
-                          {Object.keys(user.answers).length}
-                        </Typography>
-                      </TableCellNoLines>
-                    </TableRow>
-                  </TableBody>
-
-                  <TableRow>
-                    <TableCellNoLines>
-                      <Typography>Created Questions</Typography>
-                    </TableCellNoLines>
-                    <TableCellNoLines>
-                      <Typography>{user.questions.length}</Typography>
-                    </TableCellNoLines>
-                  </TableRow>
-                </Table>
-              </TableContainer>
+              <CircularProgressbar
+                className={classes.score}
+                value={score(
+                  Object.keys(user.answers).length,
+                  user.questions.length
+                )}
+                maxValue={maxScore}
+                text={score(
+                  Object.keys(user.answers).length,
+                  user.questions.length
+                )}
+              />
+              <Divider
+                orientation={desktop ? "vertical" : "horizontal"}
+                className={classes.horizontalDivider}
+              />
+              <div className={classes.infoContainer}>
+                <div className={classes.info}>
+                  <Typography variant="body2" color="textSecondary">
+                    Answered Questions
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {Object.keys(user.answers).length}
+                  </Typography>
+                </div>
+                <div className={classes.info}>
+                  <Typography variant="body2" color="textSecondary">
+                    Created Questions
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {user.questions.length}
+                  </Typography>
+                </div>
+              </div>
             </CardContent>
-
-            <TableContainer className={classes.score}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCellNoLines>
-                      <Typography>Score</Typography>
-                    </TableCellNoLines>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCellNoLines>
-                      <Typography>
-                        <CircularProgressbar
-                          value={score(
-                            Object.keys(user.answers).length,
-                            user.questions.length
-                          )}
-                          maxValue={maxScore}
-                          text={score(
-                            Object.keys(user.answers).length,
-                            user.questions.length
-                          )}
-                        />
-                      </Typography>
-                    </TableCellNoLines>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
           </Card>
         ))}
-    </div>
+    </>
   );
 }

@@ -1,8 +1,11 @@
 export default {
+  currentUser: { user: "" },
   questions: {
     "8xf0y6ziyjabvozdd253nd": {
       id: "8xf0y6ziyjabvozdd253nd",
       answer: null,
+      author: "sarahedo",
+      timestamp: 1467166872634,
       optionOne: {
         text: "have horrible short term memory"
       },
@@ -13,6 +16,8 @@ export default {
     "6ni6ok3ym7mf1p33lnez": {
       id: "6ni6ok3ym7mf1p33lnez",
       answer: null,
+      author: "johndoe",
+      timestamp: 1468479767190,
       optionOne: {
         text: "become a superhero"
       },

@@ -1,25 +1,30 @@
 import React from "react";
-import { AppBar, Tabs, Tab, Typography } from "@material-ui/core";
+import { AppBar, Tabs, Tab } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { logout } from "../redux/actions";
+import { AccountCircle } from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    // flexGrow: 1,
-    // backgroundColor: theme.palette.background.paper
     paddingBottom: theme.spacing(3)
-  },
-  left: {
-    // justifyContent: "screenLeft"
   }
 }));
 
 export default function Header() {
   const classes = useStyles();
   const history = useHistory();
+  const currentUser = useSelector(state => state.currentUser);
+
   const handleCallToRouter = value => {
     history.push(value);
   };
+  const handleLogout = () => {
+    logout();
+    history.push("/login");
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -35,12 +40,19 @@ export default function Header() {
             value="/leaderboard"
             onClick={() => history.push("/leaderboard")}
           />
-          <Typography className={classes.left}>Hello User</Typography>
+          <Tab
+            label={
+              <>
+                <AccountCircle />
+                Hello {currentUser.user}
+              </>
+            }
+          />
           <Tab
             className={classes.left}
             label="Logout"
             value="/logout"
-            onClick={() => history.push("/login")}
+            onClick={handleLogout}
           />
         </Tabs>
       </AppBar>

@@ -18,3 +18,11 @@ export const createNewQuestion = newQuestion => {
     }
   });
 };
+
+export const login = currentUser => {
+  store.dispatch({ type: "login", payload: { currentUser } });
+};
+
+export const logout = () => {
+  store.dispatch({ type: "logout" });
+};

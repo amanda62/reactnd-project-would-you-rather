@@ -22,6 +22,13 @@ const rootReducer = (state = initialState, action) => {
           [action.payload.newQuestion.id]: action.payload.newQuestion
         }
       };
+    case "login":
+      return {
+        ...state,
+        currentUser: action.payload.currentUser
+      };
+    case "logout":
+      return { ...state, currentUser: { user: "" } };
     default:
       return state;
   }

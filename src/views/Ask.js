@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Typography, Button } from "@material-ui/core";
+import { TextField, Typography, Button, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import uuid from "uuid/v5";
 import { createNewQuestion } from "../redux/actions";
@@ -9,10 +9,13 @@ import { createNewQuestion } from "../redux/actions";
 //need to do onSubmit
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  root: { padding: theme.spacing(2) },
   title: {
     ...theme.typography.h3,
     paddingBottom: theme.spacing(2)
+  },
+  button: {
+    margin: `${theme.spacing(2)}px 0`
   }
 }));
 
@@ -44,32 +47,40 @@ export default function Ask() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Typography className={classes.title} variant="h1">
-        Would you rather:
-      </Typography>
-      <TextField
-        fullWidth
-        id="optionOne"
-        label="Option One"
-        className={classes.textField}
-        value={newQuestion.optionOne.text}
-        onChange={handleChange("optionOne")}
-        margin="dense"
-      ></TextField>
-      <Typography variant="body1">or </Typography>
-      <TextField
-        fullWidth
-        id="optionTwo"
-        label="Option Two"
-        className={classes.textField}
-        value={newQuestion.optionTwo.text}
-        onChange={handleChange("optionTwo")}
-        margin="dense"
-      ></TextField>
-      <Button fullWidth variant="contained" color="primary" onClick={() => {}}>
-        Submit
-      </Button>
-    </form>
+    <Paper className={classes.root}>
+      <form onSubmit={handleSubmit}>
+        <Typography className={classes.title} variant="h1">
+          Would you rather:
+        </Typography>
+
+        <TextField
+          fullWidth
+          id="optionOne"
+          label="Option One"
+          className={classes.textField}
+          value={newQuestion.optionOne.text}
+          onChange={handleChange("optionOne")}
+          margin="dense"
+        ></TextField>
+        <TextField
+          fullWidth
+          id="optionTwo"
+          label="Option Two"
+          className={classes.textField}
+          value={newQuestion.optionTwo.text}
+          onChange={handleChange("optionTwo")}
+          margin="dense"
+        ></TextField>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          type="submit"
+          className={classes.button}
+        >
+          Submit
+        </Button>
+      </form>
+    </Paper>
   );
 }
