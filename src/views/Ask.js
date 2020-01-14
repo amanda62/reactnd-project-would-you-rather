@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { TextField, Typography, Button, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import uuid from "uuid/v5";
 import { createNewQuestion } from "../redux/actions";
 
 //need to generate id
@@ -21,38 +21,31 @@ const useStyles = makeStyles(theme => ({
 
 export default function Ask() {
   const classes = useStyles();
+  const history = useHistory();
+
   const [newQuestion, setNewQuestion] = useState({
     optionOne: "",
     optionTwo: ""
   });
 
   const handleChange = name => event => {
-    setNewQuestion({ ...newQuestion, [name]: { text: event.target.value } });
+    setNewQuestion({ ...newQuestion, [name]: event.target.value });
   };
-  const handleSubmit = () => {
+  const handleSubmit = event => {
+    event.preventDefault();
     createNewQuestion({
-      id: uuid(),
-      answer: null,
-      timestamp: new Date().getTime(),
-      author: "currentUser",
-      optionOne: {
-        votes: [],
-        text: newQuestion.optionOne
-      },
-      optionTwo: {
-        votes: [],
-        text: newQuestion.optionTwo
-      }
+      optionOne: newQuestion.optionOne,
+      optionTwo: newQuestion.optionTwo
     });
+    history.push("/");
   };
 
   return (
     <Paper className={classes.root}>
+      <Typography className={classes.title} variant="h1">
+        Would you rather:
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <Typography className={classes.title} variant="h1">
-          Would you rather:
-        </Typography>
-
         <TextField
           fullWidth
           id="optionOne"
@@ -61,6 +54,7 @@ export default function Ask() {
           value={newQuestion.optionOne.text}
           onChange={handleChange("optionOne")}
           margin="dense"
+          multiline
         ></TextField>
         <TextField
           fullWidth
@@ -70,6 +64,7 @@ export default function Ask() {
           value={newQuestion.optionTwo.text}
           onChange={handleChange("optionTwo")}
           margin="dense"
+          multiline
         ></TextField>
         <Button
           fullWidth

@@ -22,18 +22,55 @@ export default function Home() {
   const classes = useStyles();
   const history = useHistory();
   const questions = useSelector(state => state.questions);
+  const currentUser = useSelector(state => state.currentUser.user);
 
   const unansweredQuestions = Object.values(questions).filter(
-    question => question.answer === null
+    question =>
+      !question.optionOne.votes.includes(currentUser) &&
+      !question.optionTwo.votes.includes(currentUser)
   );
+
+  const answeredQuestions = Object.values(questions).filter(
+    question =>
+      question.optionOne.votes.includes(currentUser) ||
+      question.optionTwo.votes.includes(currentUser)
+  );
+
   return (
     <div className={classes.root}>
       <Typography className={classes.title} variant="h1">
         Would you rather:
       </Typography>
 
-      {unansweredQuestions.length ? (
-        unansweredQuestions.map(question => (
+      <div>
+        unanswered questions
+        {unansweredQuestions.length ? (
+          unansweredQuestions.map(question => (
+            <Card
+              className={classes.card}
+              key={question.id}
+              onClick={() => history.push(`/questions/${question.id}`)}
+            >
+              <CardContent className={classes.content}>
+                <Typography>{question.answer}</Typography>
+                <Typography variant="body1">
+                  {question.optionOne.text}
+                </Typography>
+                <Typography variant="body2">or</Typography>
+                <Typography variant="body1">
+                  {question.optionTwo.text}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <Typography variant="h3">ALL QUESTIONS DONE-ZO!</Typography>
+        )}
+      </div>
+
+      <div>
+        answered questions
+        {answeredQuestions.map(question => (
           <Card
             className={classes.card}
             key={question.id}
@@ -46,10 +83,8 @@ export default function Home() {
               <Typography variant="body1">{question.optionTwo.text}</Typography>
             </CardContent>
           </Card>
-        ))
-      ) : (
-        <Typography variant="h3">ALL QUESTIONS DONE-ZO!</Typography>
-      )}
+        ))}
+      </div>
     </div>
   );
 }

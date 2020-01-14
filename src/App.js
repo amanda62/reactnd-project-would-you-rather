@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
 import Header from "./components/Header";
@@ -9,38 +10,48 @@ import Leaderboard from "./views/Leaderboard";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import { Container } from "@material-ui/core";
+import NotFound from "./views/NotFound";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3)
+    backgroundColor: theme.palette.background.default
   }
 }));
 
+const ProtectedRoute = props => {
+  const currentUser = useSelector(state => state.currentUser);
+  if (currentUser) return <Route {...props} />;
+  return <Login />;
+};
+
 export default function App() {
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <Header />
       <Container maxWidth="sm">
         <Switch>
-          <Route exact path="/">
+          <ProtectedRoute exact path="/">
             <Home />
-          </Route>
-          <Route exact path="/questions/:questionId">
+          </ProtectedRoute>
+          <ProtectedRoute exact path="/questions/:questionId">
             <PollDetail />
-          </Route>
-          <Route exact path="/ask">
+          </ProtectedRoute>
+          <ProtectedRoute exact path="/ask">
             <Ask />
-          </Route>
-          <Route exact path="/leaderboard">
+          </ProtectedRoute>
+          <ProtectedRoute exact path="/leaderboard">
             <Leaderboard />
-          </Route>
+          </ProtectedRoute>
           <Route exact path="/login">
             <Login />
           </Route>
           <Route exact path="/register">
             <Register />
+          </Route>
+          <Route path="/">
+            <NotFound />
           </Route>
         </Switch>
       </Container>

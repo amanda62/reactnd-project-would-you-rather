@@ -11,19 +11,37 @@ const useStyles = makeStyles(theme => ({
   root: { padding: theme.spacing(2) },
   button: {
     margin: `${theme.spacing(1)}px 0`
+  },
+  stats: {
+    display: "flex",
+    flexDirection: "column",
+    margin: `${theme.spacing(1)}px ${theme.spacing(4)}px`,
+    [theme.breakpoints.up("md")]: {
+      flexDirection: "row",
+      justifyContent: "space-between"
+    }
   }
 }));
 
 export default function PollDetail() {
   const classes = useStyles();
   const params = useParams();
+  const currentUser = useSelector(state => state.currentUser.user);
   const currentQuestion = useSelector(
     state => state.questions[params.questionId]
   );
+  const getAnswer = () => {
+    if (currentQuestion.optionOne.votes.includes(currentUser))
+      return currentQuestion.optionOne.text;
+    if (currentQuestion.optionTwo.votes.includes(currentUser))
+      return currentQuestion.optionTwo.text;
+    return null;
+  };
+  const answer = getAnswer();
 
   return (
     <Paper className={classes.root}>
-      {currentQuestion.answer === null ? (
+      {answer === null ? (
         <>
           <Typography variant="h3">Would you rather: </Typography>
           <Button
@@ -46,9 +64,25 @@ export default function PollDetail() {
           </Button>
         </>
       ) : (
-        <Typography>{`you chose: ${
-          currentQuestion[currentQuestion.answer].text
-        }`}</Typography>
+        <div>
+          <Typography variant="h4">{`you chose: ${answer}`}</Typography>
+          <div className={classes.stats}>
+            <Typography variant="h6">
+              {currentQuestion.optionOne.text}
+            </Typography>
+            <Typography>
+              received {currentQuestion.optionOne.votes.length} votes
+            </Typography>
+          </div>
+          <div className={classes.stats}>
+            <Typography variant="h6">
+              {currentQuestion.optionTwo.text}
+            </Typography>
+            <Typography>
+              received {currentQuestion.optionTwo.votes.length} votes
+            </Typography>
+          </div>
+        </div>
       )}
       <Typography variant="caption">
         Asked by {currentQuestion.author}

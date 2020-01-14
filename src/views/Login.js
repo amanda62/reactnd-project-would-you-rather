@@ -66,7 +66,7 @@ export default function Login() {
       </form>
       <div className={classes.register}>
         New around here?
-        <Button onClick={() => history.push("/registerUser")} fullWidth>
+        <Button onClick={() => history.push("/register")} fullWidth>
           Make a profile.
         </Button>
       </div>

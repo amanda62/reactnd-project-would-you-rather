@@ -13,9 +13,7 @@ export const vote = (questionId, option) => {
 export const createNewQuestion = newQuestion => {
   store.dispatch({
     type: "createNewQuestion",
-    payload: {
-      newQuestion
-    }
+    payload: newQuestion
   });
 };
 
