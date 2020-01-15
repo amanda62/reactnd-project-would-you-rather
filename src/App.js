@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
@@ -11,6 +11,8 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import { Container } from "@material-ui/core";
 import NotFound from "./views/NotFound";
+import { _getQuestions } from "./_DATA";
+import { setQuestions } from "./redux/actions";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +28,18 @@ const ProtectedRoute = props => {
 
 export default function App() {
   const classes = useStyles();
+
+  useEffect(
+    // whatever you want to do when the component mounts or updates
+    //listener, empty array = only when mounts, vs. classes, etc.
+    () => {
+      (async () => {
+        const questions = await _getQuestions();
+        setQuestions(questions);
+      })();
+    },
+    []
+  );
 
   return (
     <div className={classes.root}>

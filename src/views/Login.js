@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
@@ -11,7 +11,8 @@ import {
   Paper
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { login } from "../redux/actions";
+import { login, setUsers } from "../redux/actions";
+import { _getUsers } from "../_DATA";
 
 //QUESTIONS: select onopen on close, controlled, why?
 
@@ -33,6 +34,14 @@ export default function Login() {
   const history = useHistory();
   const users = useSelector(state => state.users);
   const [currentUser, setUser] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const users = await _getUsers();
+      setUsers(users);
+    })();
+  }, []);
+
   const handleChange = event => setUser(event.target.value);
   const handleSubmit = () => {
     login({ user: currentUser, timestamp: new Date().getTime() });
@@ -47,11 +56,12 @@ export default function Login() {
         <FormControl margin="normal" fullWidth>
           <InputLabel id="username">Username</InputLabel>
           <Select autoWidth onChange={handleChange} labelId="username">
-            {Object.values(users).map(user => (
-              <MenuItem key={user.id} value={user.id}>
-                {user.id}
-              </MenuItem>
-            ))}
+            {users &&
+              Object.values(users).map(user => (
+                <MenuItem key={user.id} value={user.id}>
+                  {user.id}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         <Button

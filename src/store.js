@@ -4,6 +4,10 @@ import uuid from "uuid/v4";
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "setUsers":
+      return { ...state, users: action.payload };
+    case "setQuestions":
+      return { ...state, questions: action.payload };
     case "vote":
       return {
         ...state,
