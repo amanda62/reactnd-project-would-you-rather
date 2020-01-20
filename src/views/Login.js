@@ -11,10 +11,8 @@ import {
   Paper
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { login, setUsers } from "../redux/actions";
-import { _getUsers } from "../_DATA";
-
-//QUESTIONS: select onopen on close, controlled, why?
+import { login } from "../redux/actions";
+import { getUsers } from "../services";
 
 const useStyles = makeStyles(theme => ({
   root: { padding: theme.spacing(2) },
@@ -36,16 +34,19 @@ export default function Login() {
   const [currentUser, setUser] = useState();
 
   useEffect(() => {
-    (async () => {
-      const users = await _getUsers();
-      setUsers(users);
-    })();
+    getUsers();
   }, []);
 
-  const handleChange = event => setUser(event.target.value);
+  const handleChange = event => {
+    const selectedUser = users[event.target.value];
+    setUser(selectedUser);
+  };
+
   const handleSubmit = () => {
-    login({ user: currentUser, timestamp: new Date().getTime() });
-    history.push("/");
+    if (!currentUser) return;
+    login(currentUser);
+    const { pathname } = window.location;
+    history.push(pathname !== "/login" ? pathname : "/");
   };
 
   return (
@@ -55,7 +56,12 @@ export default function Login() {
       <form onSubmit={handleSubmit}>
         <FormControl margin="normal" fullWidth>
           <InputLabel id="username">Username</InputLabel>
-          <Select autoWidth onChange={handleChange} labelId="username">
+          <Select
+            autoWidth
+            onChange={handleChange}
+            value={currentUser ? currentUser.id : ""}
+            labelId="username"
+          >
             {users &&
               Object.values(users).map(user => (
                 <MenuItem key={user.id} value={user.id}>

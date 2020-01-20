@@ -1,18 +1,17 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
+import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import Add from "./views/Add";
 import Header from "./components/Header";
 import Home from "./views/Home";
-import PollDetail from "./views/PollDetail";
-import Ask from "./views/Ask";
 import Leaderboard from "./views/Leaderboard";
 import Login from "./views/Login";
-import Register from "./views/Register";
-import { Container } from "@material-ui/core";
 import NotFound from "./views/NotFound";
-import { _getQuestions } from "./_DATA";
-import { setQuestions } from "./redux/actions";
+import PollDetail from "./views/PollDetail";
+import Register from "./views/Register";
+import { getQuestions } from "./services";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,17 +28,10 @@ const ProtectedRoute = props => {
 export default function App() {
   const classes = useStyles();
 
-  useEffect(
-    // whatever you want to do when the component mounts or updates
-    //listener, empty array = only when mounts, vs. classes, etc.
-    () => {
-      (async () => {
-        const questions = await _getQuestions();
-        setQuestions(questions);
-      })();
-    },
-    []
-  );
+  useEffect(() => {
+    getQuestions();
+  }, []);
+  //empty array, only executes when it mounts
 
   return (
     <div className={classes.root}>
@@ -52,8 +44,8 @@ export default function App() {
           <ProtectedRoute exact path="/questions/:questionId">
             <PollDetail />
           </ProtectedRoute>
-          <ProtectedRoute exact path="/ask">
-            <Ask />
+          <ProtectedRoute exact path="/add">
+            <Add />
           </ProtectedRoute>
           <ProtectedRoute exact path="/leaderboard">
             <Leaderboard />

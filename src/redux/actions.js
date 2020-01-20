@@ -1,27 +1,24 @@
 import store from "../store";
 
-export const setUsers = users =>
-  store.dispatch({ type: "setUsers", payload: users });
+export const getUsersCompleted = users =>
+  store.dispatch({ type: "getUsersCompleted", payload: users });
 
-export const setQuestions = questions =>
-  store.dispatch({ type: "setQuestions", payload: questions });
+export const getQuestionsCompleted = questions =>
+  store.dispatch({ type: "getQuestionsCompleted", payload: questions });
 
-export const vote = (questionId, option) =>
+export const saveQuestionAnswerCompleted = questionAnswer =>
   store.dispatch({
-    type: "vote",
-    payload: {
-      questionId,
-      option
-    }
+    type: "saveQuestionAnswerCompleted",
+    payload: questionAnswer
   });
 
-export const createNewQuestion = newQuestion =>
+export const saveQuestionCompleted = newQuestion =>
   store.dispatch({
-    type: "createNewQuestion",
+    type: "saveQuestionCompleted",
     payload: newQuestion
   });
 
 export const login = currentUser =>
-  store.dispatch({ type: "login", payload: { currentUser } });
+  store.dispatch({ type: "login", payload: currentUser });
 
 export const logout = () => store.dispatch({ type: "logout" });

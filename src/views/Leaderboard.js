@@ -66,7 +66,7 @@ export default function Leaderboard() {
       {Object.values(users)
         .sort((a, b) => userScore(b) - userScore(a))
         .map(user => (
-          <Card className={classes.card} key={user.id} raised="true">
+          <Card className={classes.card} key={user.id} raised>
             <CardHeader
               avatar={<Avatar src={user.avatarURL} />}
               title={user.name}

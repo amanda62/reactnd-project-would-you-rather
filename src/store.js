@@ -1,16 +1,25 @@
 import { createStore } from "redux";
 import initialState from "./initialState";
-import uuid from "uuid/v4";
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "setUsers":
+    case "getUsersCompleted":
       return { ...state, users: action.payload };
-    case "setQuestions":
+    case "getQuestionsCompleted":
       return { ...state, questions: action.payload };
-    case "vote":
+    case "saveQuestionAnswerCompleted":
       return {
         ...state,
+        users: {
+          ...state.users,
+          [state.currentUser.id]: {
+            ...state.users[state.currentUser.id],
+            answers: {
+              ...state.users[state.currentUser.id].answers,
+              [action.payload.questionId]: action.payload.option
+            }
+          }
+        },
         questions: {
           ...state.questions,
           [action.payload.questionId]: {
@@ -23,38 +32,35 @@ const rootReducer = (state = initialState, action) => {
                 ...state.questions[action.payload.questionId][
                   action.payload.option
                 ].votes,
-                state.currentUser.user
+                state.currentUser.id
               ]
             }
           }
         }
       };
-    case "createNewQuestion":
-      const id = uuid();
+    case "saveQuestionCompleted":
       return {
         ...state,
+        users: {
+          ...state.users,
+          [state.currentUser.id]: {
+            ...state.users[state.currentUser.id],
+            questions: [
+              ...state.users[state.currentUser.id].questions,
+              action.payload.id
+            ]
+          }
+        },
         questions: {
           ...state.questions,
-          [id]: {
-            id,
-            timestamp: new Date().getTime(),
-            author: state.currentUser.user,
-            optionOne: {
-              votes: [],
-              text: action.payload.optionOne
-            },
-            optionTwo: {
-              votes: [],
-              text: action.payload.optionTwo
-            }
-          }
+          [action.payload.id]: action.payload
         }
       };
 
     case "login":
       return {
         ...state,
-        currentUser: action.payload.currentUser
+        currentUser: action.payload
       };
     case "logout":
       return { ...state, currentUser: null };

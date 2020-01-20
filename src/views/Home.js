@@ -22,7 +22,7 @@ export default function Home() {
   const classes = useStyles();
   const history = useHistory();
   const questions = useSelector(state => state.questions);
-  const currentUser = useSelector(state => state.currentUser.user);
+  const currentUser = useSelector(state => state.currentUser.id);
   const [currentTab, setCurrentTab] = React.useState("unanswered");
   const handleChange = (event, newValue) => {
     setCurrentTab(newValue);
@@ -57,24 +57,26 @@ export default function Home() {
 
       <div>
         {showQuestions.length ? (
-          showQuestions.map(question => (
-            <Card
-              className={classes.card}
-              key={question.id}
-              onClick={() => history.push(`/questions/${question.id}`)}
-            >
-              <CardContent className={classes.content}>
-                <Typography>{question.answer}</Typography>
-                <Typography variant="body1">
-                  {question.optionOne.text}
-                </Typography>
-                <Typography variant="body2">or</Typography>
-                <Typography variant="body1">
-                  {question.optionTwo.text}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))
+          showQuestions
+            .sort((a, b) => b.timestamp - a.timestamp)
+            .map(question => (
+              <Card
+                className={classes.card}
+                key={question.id}
+                onClick={() => history.push(`/questions/${question.id}`)}
+              >
+                <CardContent className={classes.content}>
+                  <Typography>{question.answer}</Typography>
+                  <Typography variant="body1">
+                    {question.optionOne.text}
+                  </Typography>
+                  <Typography variant="body2">or</Typography>
+                  <Typography variant="body1">
+                    {question.optionTwo.text}
+                  </Typography>
+                </CardContent>
+              </Card>
+            ))
         ) : (
           <Typography variant="h3">ALL QUESTIONS DONE-ZO!</Typography>
         )}

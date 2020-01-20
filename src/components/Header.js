@@ -38,9 +38,8 @@ export default function Header() {
   const currentUser = useSelector(state => state.currentUser);
   const views = [
     { name: "Home", path: "/" },
-    { name: "Ask", path: "/ask" },
+    { name: "Add", path: "/add" },
     { name: "Leaderboard", path: "/leaderboard" }
-    // { name: "Poll", path: "/questions" }
   ];
 
   //Desktop
@@ -75,6 +74,7 @@ export default function Header() {
               <Hidden smDown>
                 <Tabs
                   variant="fullWidth"
+                  //The pathname may not map to existing tabs, because not every view has a corresponding tab (i.e. Poll Detail pages)
                   value={history.location.pathname}
                   onChange={handleCallToRouter}
                 >
@@ -82,6 +82,7 @@ export default function Header() {
                     <Tab
                       label={view.name}
                       value={view.path}
+                      key={view.path}
                       onClick={() => history.push(view.path)}
                     />
                   ))}
@@ -98,24 +99,20 @@ export default function Header() {
                     onClose={handleClose}
                   >
                     {views.map(view => (
-                      <MenuItem onClick={() => handleCallToRouter(view.path)}>
+                      <MenuItem
+                        key={view.path}
+                        onClick={() => handleCallToRouter(view.path)}
+                      >
                         {view.name}
                       </MenuItem>
                     ))}
                   </Menu>
                 </div>
-                <Typography variant="h6" className={classes.title}>
-                  {/* {views.find(view => view.path === history.location.pathname).name} */}
-                </Typography>
               </Hidden>
             </>
           )}
           <div className={classes.user}>
-            {currentUser && (
-              <Hidden smDown>
-                <Typography>Hello {currentUser.user}</Typography>
-              </Hidden>
-            )}
+            {currentUser && <Typography>Hello {currentUser.name}</Typography>}
             <IconButton onClick={handleUser} color="inherit">
               <Avatar src={currentUser && currentUser.avatarURL} />
             </IconButton>

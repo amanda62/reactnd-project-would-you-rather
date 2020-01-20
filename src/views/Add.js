@@ -1,12 +1,9 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { TextField, Typography, Button, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { createNewQuestion } from "../redux/actions";
-
-//need to generate id
-//pull user data, etc.
-//need to do onSubmit
+import { saveQuestion } from "../services";
 
 const useStyles = makeStyles(theme => ({
   root: { padding: theme.spacing(2) },
@@ -19,23 +16,24 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Ask() {
+export default function Add() {
   const classes = useStyles();
   const history = useHistory();
+  const author = useSelector(state => state.currentUser.id);
 
   const [newQuestion, setNewQuestion] = useState({
     optionOne: "",
     optionTwo: ""
   });
 
-  const handleChange = name => event => {
+  const handleChange = name => event =>
     setNewQuestion({ ...newQuestion, [name]: event.target.value });
-  };
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    createNewQuestion({
-      optionOne: newQuestion.optionOne,
-      optionTwo: newQuestion.optionTwo
+    await saveQuestion({
+      optionOneText: newQuestion.optionOne,
+      optionTwoText: newQuestion.optionTwo,
+      author
     });
     history.push("/");
   };
