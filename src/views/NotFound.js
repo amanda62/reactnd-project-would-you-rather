@@ -5,7 +5,11 @@ import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    textAlign: "end"
+    display: "flex",
+    flexDirection: "column",
+    flex: 1,
+    textAlign: "center",
+    marginTop: "10px"
   }
 }));
 
@@ -15,9 +19,12 @@ export default function NotFound() {
   return (
     <div className={classes.root}>
       <Typography variant="h4">
-        Sorry, the page you are looking for has gone *poof*
+        Sorry, the page you are looking for has gone
       </Typography>
+      <Typography variant="h3">*poof*</Typography>
+      <br />
       <Typography variant="h5">#404</Typography>
+      <br />
       <Link to="/">Click Me!</Link>
     </div>
   );
