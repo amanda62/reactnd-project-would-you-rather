@@ -41,7 +41,6 @@ export default function Header() {
     { name: "Add", path: "/add" },
     { name: "Leaderboard", path: "/leaderboard" }
   ];
-  //The pathname may not map to existing tabs, because not every view has a corresponding tab (i.e. Poll Detail pages)
   const tabsValue = views
     .map(view => view.path)
     .includes(history.location.pathname)
