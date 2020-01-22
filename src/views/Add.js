@@ -30,6 +30,7 @@ export default function Add() {
     setNewQuestion({ ...newQuestion, [name]: event.target.value });
   const handleSubmit = async event => {
     event.preventDefault();
+    if (!newQuestion.optionOne.trim() || !newQuestion.optionTwo.trim()) return;
     await saveQuestion({
       optionOneText: newQuestion.optionOne,
       optionTwoText: newQuestion.optionTwo,

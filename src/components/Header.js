@@ -41,6 +41,12 @@ export default function Header() {
     { name: "Add", path: "/add" },
     { name: "Leaderboard", path: "/leaderboard" }
   ];
+  //The pathname may not map to existing tabs, because not every view has a corresponding tab (i.e. Poll Detail pages)
+  const tabsValue = views
+    .map(view => view.path)
+    .includes(history.location.pathname)
+    ? history.location.pathname
+    : false;
 
   //Desktop
   const handleCallToRouter = value => {
@@ -74,8 +80,7 @@ export default function Header() {
               <Hidden smDown>
                 <Tabs
                   variant="fullWidth"
-                  //The pathname may not map to existing tabs, because not every view has a corresponding tab (i.e. Poll Detail pages)
-                  value={history.location.pathname}
+                  value={tabsValue}
                   onChange={handleCallToRouter}
                 >
                   {views.map(view => (
